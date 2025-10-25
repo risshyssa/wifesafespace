@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>her_safespace_v2 ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Patrick+Hand&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff6f7;
+      --paper:#fffaf9;
+      --accent:#f7c9d1; /* soft pink */
+      --muted:#7a5f63;
+      --shadow: 0 10px 30px rgba(18,12,10,0.08);
+      --radius:18px;
+      --overlay-tint: rgba(255,203,197,0.18); /* gentle sunset tint */
+    }
+    html,body{height:100%;margin:0;font-family:'Open Sans',system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#4b3a3d;background:var(--bg);-webkit-font-smoothing:antialiased}
+
+    /* background video container */
+    .bg-video-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+    .bg-video-wrap iframe, .bg-video-wrap video{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-width:120%;min-height:120%;filter:blur(4px) brightness(0.7);opacity:0.95}
+    .bg-tint{position:fixed;inset:0;background:var(--overlay-tint);mix-blend-mode:soft-light;z-index:1;pointer-events:none}
+
+    .wrap{position:relative;z-index:5;max-width:920px;margin:28px auto;padding:20px}
+    .paper{background:linear-gradient(180deg,var(--paper),#fffefc);border-radius:20px;padding:18px;box-shadow:var(--shadow);backdrop-filter: blur(2px);}
+
+    header{display:flex;gap:12px;align-items:center}
+    .title{font-family:'Dancing Script',cursive;font-size:30px;color:#cc6f86;margin:0}
+    .subtitle{font-size:13px;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:16px}
+
+    /* scrapbook cards */
+    .card{background:rgba(255,255,255,0.85);padding:16px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,0.06);border:1px solid rgba(255,255,255,0.6)}
+    .love-letter{font-family:'Patrick Hand','Dancing Script',cursive;font-size:18px;line-height:1.55;color:#4b3233}
+
+    /* polaroid gallery */
+    .gallery{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-start;margin-top:8px}
+    .polaroid{background:#fff;padding:10px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.08);border:6px solid #fff;display:inline-block;transform:rotate(-3deg)}
+    .polaroid img{width:120px;height:140px;object-fit:cover;border-radius:6px;display:block}
+
+    /* secret note */
+    .secret-btn{position:fixed;right:18px;bottom:18px;z-index:20;background:linear-gradient(180deg,var(--accent),#f6b6c4);border:none;padding:12px;border-radius:50%;box-shadow:0 8px 20px rgba(0,0,0,0.2);cursor:pointer}
+    .secret-panel{position:fixed;right:18px;bottom:84px;width:300px;max-width:80%;background:rgba(255,255,255,0.96);padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.12);display:none;z-index:21}
+
+    /* spotify area */
+    .spotify{display:flex;align-items:center;gap:12px}
+
+    footer{margin-top:18px;font-size:13px;color:var(--muted);text-align:center}
+
+    /* animations */
+    .fade-in{opacity:0;transform:translateY(6px);transition:opacity 2s ease, transform 2s ease}
+    .fade-in.show{opacity:1;transform:translateY(0)}
+
+    /* responsive */
+    @media(min-width:900px){
+      .grid{grid-template-columns:1fr 320px}
+    }
+
+    /* subtle paper texture overlay */
+    body::after{content:'';position:fixed;inset:0;background-image:url('https://www.transparenttextures.com/patterns/white-wall.png');opacity:0.18;z-index:2;pointer-events:none}
+
+  </style>
+</head>
+<body>
+
+  <!-- Background video (YouTube embed configured to autoplay muted + loop) -->
+  <div class="bg-video-wrap" aria-hidden="true">
+    <iframe id="yt-bg" src="https://www.youtube.com/embed/5wRWniH7rt8?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&loop=1&playlist=5wRWniH7rt8&iv_load_policy=3" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+  <div class="bg-tint" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="paper">
+      <header>
+        <div>
+          <h1 class="title fade-in" id="title">Welcome to your safe space, my love ❤️</h1>
+          <div class="subtitle fade-in" id="subtitle">a little corner of the internet made just for you</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div class="subtitle" style="font-size:12px;color:var(--muted)">Made with love • her_safespace_v2</div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <main>
+          <section class="card fade-in" id="letter-card" style="margin-top:14px" aria-labelledby="letter-title">
+            <h2 id="letter-title" style="margin:0 0 8px 0;font-family:'Dancing Script',cursive">Dear love,</h2>
+            <div class="love-letter" id="love-letter"> <!-- CONFIG.LOVE_LETTER will inject here -->
+            </div>
+          </section>
+
+          <section class="card fade-in" style="margin-top:14px">
+            <div style="font-size:13px;color:var(--muted)">Today's note</div>
+            <div id="daily-note" style="margin-top:8px;font-size:16px;min-height:66px;color:#4b3a3d">Loading...</div>
+
+            <div style="font-size:13px;color:var(--muted);margin-top:12px">Quote of the day</div>
+            <div id="daily-quote" style="margin-top:8px;font-size:16px;min-height:66px;color:#4b3a3d">Loading...</div>
+          </section>
+
+          <section class="card fade-in" style="margin-top:14px">
+            <div style="font-size:13px;color:var(--muted)">Memories</div>
+            <div class="gallery" id="gallery">
+              <!-- photos injected by script -->
+            </div>
+          </section>
+
+        </main>
+
+        <aside>
+          <div class="card fade-in" style="text-align:center">
+            <div style="font-size:13px;color:var(--muted)">Play something soft</div>
+            <div id="spotify-wrap" style="margin-top:10px;opacity:0;transition:opacity 1.2s ease">
+              <iframe id="spotify-iframe" src="https://open.spotify.com/embed/track/4whLOE7hwNIAykoMcSZmvO" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+            <div style="margin-top:8px;font-size:12px;color:var(--muted)">Tip: she may need to be logged into Spotify to play full track.</div>
+          </div>
+
+          <div class="card fade-in" style="margin-top:12px;text-align:center">
+            <div style="font-size:13px;color:var(--muted)">Edit notes</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:8px">Daily Note & Quote are loaded from a Google Sheet you control.</div>
+            <div style="margin-top:10px"><a id="open-sheet" class="btn" style="background:var(--accent);padding:8px 12px;border-radius:10px;color:#4b3a3d;text-decoration:none">Open sheet</a></div>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        <div style="font-size:13px;color:var(--muted)">Built with care • edit anything in the config at the bottom of the file</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- secret note button + panel -->
+  <button class="secret-btn" id="secret-btn" aria-label="Open secret notes">❤️</button>
+  <div class="secret-panel" id="secret-panel" role="dialog" aria-hidden="true">
+    <div style="font-weight:600;margin-bottom:6px;color:#b24e6a">Little secrets</div>
+    <div id="secret-content" style="font-size:15px;color:#4b3a3d;min-height:40px">No secret notes yet — add some in the HTML config.</div>
+  </div>
+
+  <script>
+    /* ==========================
+       CONFIG (edit these values)
+       ==========================
+    */
+    const CONFIG = {
+      LOVE_LETTER: `hello, my love! here's something i made to make you feel better when you feel like you're being pulled down, and something to remind you that you're not alone, now that i'm here with you. Now you can access this website anytime and i'll be updating this each day so you have something new to look at everyday, okay? I love you so so so sooo much, and i hope this makes you feel better, my love.`,
+      GALLERY_IMAGES: [
+        './images/one.jpg',
+        './images/two.jpg',
+        './images/three.jpg'
+      ],
+      SECRET_NOTES: [
+        "i'm proud of you today.",
+        "remember the time we got lost and laughed for hours?",
+        "you make everything brighter."
+      ]
+    };
+
+   const DOC_URL = 'https://docs.google.com/document/d/e/2PACX-1vRX5raJKryfopd6qpBxI9kdtzcDgl46lZdJq8NVsYSZZoAUpbsqwEyw981o9mC-jdW-0l6aW-2Ds-ha/pub'
+
+    // inject love letter
+    document.getElementById('love-letter').textContent = CONFIG.LOVE_LETTER;
+
+    // build gallery
+    const gallery = document.getElementById('gallery');
+    CONFIG.GALLERY_IMAGES.forEach((src,i)=>{
+      const wrap = document.createElement('div'); wrap.className='polaroid';
+      const img = document.createElement('img'); img.src=src; img.alt=`memory ${i+1}`;
+      wrap.appendChild(img); gallery.appendChild(wrap);
+    });
+
+    // secret notes
+    const secretBtn = document.getElementById('secret-btn');
+    const secretPanel = document.getElementById('secret-panel');
+    const secretContent = document.getElementById('secret-content');
+    let secretOpen=false;
+    secretBtn.addEventListener('click',()=>{
+      secretOpen = !secretOpen;
+      secretPanel.style.display = secretOpen ? 'block' : 'none';
+      secretPanel.setAttribute('aria-hidden', String(!secretOpen));
+      if(secretOpen){
+        secretContent.textContent = CONFIG.SECRET_NOTES.join('\n\n');
+      }
+    });
+
+    // fade-in sequence
+    function showFadeIns(){
+      document.querySelectorAll('.fade-in').forEach(el=>el.classList.add('show'));
+      // after 2s, fade spotify in
+      setTimeout(()=>{
+        const sp = document.getElementById('spotify-wrap'); if(sp) sp.style.opacity=1;
+      },2100);
+    }
+
+async function loadNoteFromDoc() {
+  try {
+    const response = await fetch(DOC_URL);
+    const text = await response.text();
+
+    // Parse HTML from the published Google Doc
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+
+    // Main content
+    const content = doc.body.innerHTML;
+    document.getElementById('daily-note').innerHTML = content;
+
+    // First paragraph as quote
+    const firstParagraph = doc.body.querySelector('p');
+    document.getElementById('daily-quote').innerText =
+      firstParagraph ? firstParagraph.textContent.trim() : '—';
+
+  } catch (err) {
+    console.error('Error loading Google Doc:', err);
+    document.getElementById('daily-note').innerText = "Couldn't load note 💔";
+    document.getElementById('daily-quote').innerText = "—";
+  }
+}
+
+// open sheet button (no longer used but kept for structure)
+document.getElementById('open-sheet').addEventListener('click',(e)=>{
+  e.preventDefault();
+  alert('Google Sheet mode is disabled — you are now using Google Docs for notes!');
+});
+
+// initialize animations + doc loading
+window.addEventListener('load', () => {
+  showFadeIns();
+  loadNoteFromDoc();
+});
+</script>
+
+
+</body>
+</html>
